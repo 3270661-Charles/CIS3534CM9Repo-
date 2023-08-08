@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 #networkFileRW.py
-#Pamela Brauda
-#Thursday, March 3, 2022
+#Charles Lebus
+#Monday, August 7, 2023
 #Update routers and switches;
 #read equipment from a file, write updates & errors to file
 
 ##---->>>> Use a try/except clause to import the JSON module
+try:
+    import json
+except ImportError:
+    print("Count not find json module")
 
 
 
@@ -15,7 +19,8 @@
       
 FILENAME1 = "equip_r.txt"
 FILENAME2 = "equip_s.txt"
-
+UPDATED = "updated.txt"
+ERRORS = "errors.txt"
 
 
 #prompt constants
@@ -63,17 +68,15 @@ def main():
     ##---->>>> open files here
 
 
-
-    
     #dictionaries
     ##---->>>> read the routers and addresses into the router dictionary
-
-    routers = {}
+    with open(FILENAME1) as inFile:
+        routers = json.load(inFile)
 
 
     ##---->>>> read the switches and addresses into the switches dictionary
-
-    switches = {}
+    with open(FILENAME2) as inFile:
+        switches = json.load(inFile)
 
 
     #the updated dictionary holds the device name and new ip address
@@ -132,14 +135,16 @@ def main():
     print("Number of devices updated:", devicesUpdatedCount)
 
     ##---->>>> write the updated equipment dictionary to a file
-
+    with open(UPDATED, 'w') as outFile:
+        json.dump(updated, outFile)
     
     print("Updated equipment written to file 'updated.txt'")
     print()
     print("\nNumber of invalid addresses attempted:", invalidIPCount)
 
     ##---->>>> write the list of invalid addresses to a file
-    
+    with open(ERRORS, 'w') as outFile:
+        json.dump(invalidIPAddresses, outFile)
 
     print("List of invalid addresses written to file 'errors.txt'")
 
